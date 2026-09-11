@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    container_name: flask-blog
+    ports:
+      - "5000:5000"
+    volumes:
+      # Монтируем папку проекта для автоматического обновления кода (опционально, для разработки)
+      - .:/app
+      # Том для базы данных, чтобы данные не терялись
+      - blog_data:/app/instance   # если SQLite лежит в instance, иначе /app
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=app.py
+      # Переменные из .env можно передать так:
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+    env_file:
+      - .env   # можно загрузить все переменные из файла .env
+
+volumes:
+  blog_data:
